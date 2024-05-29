@@ -1,0 +1,25 @@
+name: PHP CI on Windows
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4  # Anda bisa mengubah versi PHP sesuai kebutuhan
+        tools: composer
+
+    - name: Install dependencies
+      run: composer install
+
+    - name: Run tests
+      run: |
+        php -v
+        composer run-script test
