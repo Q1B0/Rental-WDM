@@ -1,25 +1,44 @@
-name: PHP CI on Windows
+name: CI for PHP Project
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
+
     runs-on: windows-latest
 
+    services:
+      mysql:
+        image: mysql:5.7
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: user
+          MYSQL_PASSWORD: userpassword
+
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 7.4  # Anda bisa mengubah versi PHP sesuai kebutuhan
+        php-version: '7.4'
         tools: composer
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: composer install
 
-    - name: Run tests
-      run: |
-        php -v
-        composer run-script test
+    - name: Run Tests
+      run: vendor/bin/phpunit
