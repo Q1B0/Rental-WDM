@@ -1,5 +1,5 @@
 {
-    "name": "rental-wdm",
+    "name": "rentalwdm",
     "description": "rentalan",
     "require": {
         "monolog/monolog": "1.0.*",
